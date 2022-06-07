@@ -51,4 +51,9 @@ abstract contract CrossChainEnabled {
      * call is not the result of a cross-chain message.
      */
     function _crossChainSender() internal view virtual returns (address);
+
+    /**
+     * @dev Sends a generic cross-chain message through a bridge.
+     */
+    function _sendCrossChainMessage() internal virtual;
 }

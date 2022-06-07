@@ -41,4 +41,9 @@ abstract contract CrossChainEnabledArbitrumL1 is CrossChainEnabled {
     function _crossChainSender() internal view virtual override onlyCrossChain returns (address) {
         return LibArbitrumL1.crossChainSender(_bridge);
     }
+
+    /**
+     * @dev see {CrossChainEnabled-_sendCrossChainMessage}
+     */
+    function _sendCrossChainMessage() internal view virtual override {}
 }
