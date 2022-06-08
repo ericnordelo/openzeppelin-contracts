@@ -54,6 +54,8 @@ abstract contract CrossChainEnabled {
 
     /**
      * @dev Sends a generic cross-chain message through a bridge.
+     *
+     * NOTE: Returns a unique identifier for the transaction if the protocol allows it.
      */
-    function _sendCrossChainMessage() internal virtual;
+    function _sendCrossChainMessage(address destination_, bytes memory calldata_) internal virtual returns (uint256);
 }

@@ -40,4 +40,20 @@ library LibArbitrumL2 {
                 ? ArbitrumL2_Bridge(arbsys).myCallersAddressWithoutAliasing()
                 : msg.sender;
     }
+
+    /**
+     * @dev Sends a message from L2 to L1 via `arbsys`.
+     *
+     * Returns a uint256 representing a unique Id for the L2 => L1 transaction.
+     *
+     * NOTE: Check https://developer.offchainlabs.com/docs/l1_l2_messages#l2-to-l1-messages-lifecycle[L2 to L1 Messages Lifecycle]
+     * from Arbitrum docs to understand the full lifecycle.
+     */
+    function sendCrossChainMessage(
+        address arbsys,
+        address destination,
+        bytes memory calldataForL1
+    ) internal returns (uint256) {
+        return ArbitrumL2_Bridge(arbsys).sendTxToL1(destination, calldataForL1);
+    }
 }

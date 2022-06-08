@@ -32,4 +32,16 @@ abstract contract CrossChainEnabledArbitrumL2 is CrossChainEnabled {
     function _crossChainSender() internal view virtual override onlyCrossChain returns (address) {
         return LibArbitrumL2.crossChainSender(LibArbitrumL2.ARBSYS);
     }
+
+    /**
+     * @dev see {CrossChainEnabled-_sendCrossChainMessage}
+     */
+    function _sendCrossChainMessage(address destination_, bytes memory calldata_)
+        internal
+        virtual
+        override
+        returns (uint256)
+    {
+        return LibArbitrumL2.sendCrossChainMessage(LibArbitrumL2.ARBSYS, destination_, calldata_);
+    }
 }
