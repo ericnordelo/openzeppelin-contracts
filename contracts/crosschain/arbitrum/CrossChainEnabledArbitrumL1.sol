@@ -45,5 +45,9 @@ abstract contract CrossChainEnabledArbitrumL1 is CrossChainEnabled {
     /**
      * @dev see {CrossChainEnabled-_sendCrossChainMessage}
      */
-    function _sendCrossChainMessage() internal view virtual override {}
+    function _sendCrossChainMessage(
+        address destination,
+        bytes memory data,
+        bytes memory bridgeConfig
+    ) internal virtual override {}
 }

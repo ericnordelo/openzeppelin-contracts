@@ -17,6 +17,23 @@ import "../errors.sol";
  */
 library LibArbitrumL1 {
     /**
+     * @dev This is the configuration required for creating the Retryable Ticket in L2.
+     *
+     * NOTE: Refer to the https://developer.offchainlabs.com/docs/l1_l2_messages#parameters[Parameters Docs] in Arbitrum
+     * for a detailed explanation of each param.
+     */
+    struct BridgeConfig {
+        address destAddr;
+        uint256 l2CallValue;
+        uint256 maxSubmissionCost;
+        address excessFeeRefundAddress;
+        address callValueRefundAddress;
+        uint256 maxGas;
+        uint256 gasPriceBid;
+        bytes data;
+    }
+
+    /**
      * @dev Returns whether the current function call is the result of a
      * cross-chain message relayed by the `bridge`.
      */

@@ -35,13 +35,15 @@ abstract contract CrossChainEnabledArbitrumL2 is CrossChainEnabled {
 
     /**
      * @dev see {CrossChainEnabled-_sendCrossChainMessage}
+     *
+     * NOTE: There is not extra configuration required for this channel, so bridgeConfig
+     * can be safely ignored.
      */
-    function _sendCrossChainMessage(address destination_, bytes memory calldata_)
-        internal
-        virtual
-        override
-        returns (uint256)
-    {
-        return LibArbitrumL2.sendCrossChainMessage(LibArbitrumL2.ARBSYS, destination_, calldata_);
+    function _sendCrossChainMessage(
+        address destination,
+        bytes memory data,
+        bytes memory
+    ) internal virtual override {
+        return LibArbitrumL2.sendCrossChainMessage(LibArbitrumL2.ARBSYS, destination, data, "");
     }
 }
