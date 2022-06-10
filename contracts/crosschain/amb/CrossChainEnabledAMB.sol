@@ -50,7 +50,7 @@ contract CrossChainEnabledAMB is CrossChainEnabled {
     /**
      * @dev see {CrossChainEnabled-_sendCrossChainMessage}
      *
-     * NOTE: Non implemented yet.
+     * NOTE: Not implemented yet.
      */
     function _sendCrossChainMessage(
         address destination,

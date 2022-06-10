@@ -50,7 +50,7 @@ abstract contract CrossChainEnabledPolygonChild is IFxMessageProcessor, CrossCha
     /**
      * @dev see {CrossChainEnabled-_sendCrossChainMessage}
      *
-     * NOTE: Non implemented yet.
+     * NOTE: Not implemented yet.
      */
     function _sendCrossChainMessage(
         address destination,

@@ -19,10 +19,20 @@ abstract contract Receiver is CrossChainEnabled {
     function crossChainOwnerRestricted() external onlyCrossChainSender(owner) {}
 }
 
+abstract contract Sender is CrossChainEnabled {
+    function sendCrossChainMessage(
+        address destination,
+        bytes memory data,
+        bytes memory bridgeConfig
+    ) external {
+        _sendCrossChainMessage(destination, data, bridgeConfig);
+    }
+}
+
 /**
  * AMB
  */
-contract CrossChainEnabledAMBMock is Receiver, CrossChainEnabledAMB {
+contract CrossChainEnabledAMBMock is Receiver, Sender, CrossChainEnabledAMB {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(address bridge) CrossChainEnabledAMB(bridge) {}
 }
@@ -30,17 +40,17 @@ contract CrossChainEnabledAMBMock is Receiver, CrossChainEnabledAMB {
 /**
  * Arbitrum
  */
-contract CrossChainEnabledArbitrumL1Mock is Receiver, CrossChainEnabledArbitrumL1 {
+contract CrossChainEnabledArbitrumL1Mock is Receiver, Sender, CrossChainEnabledArbitrumL1 {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(address bridge) CrossChainEnabledArbitrumL1(bridge) {}
 }
 
-contract CrossChainEnabledArbitrumL2Mock is Receiver, CrossChainEnabledArbitrumL2 {}
+contract CrossChainEnabledArbitrumL2Mock is Receiver, Sender, CrossChainEnabledArbitrumL2 {}
 
 /**
  * Optimism
  */
-contract CrossChainEnabledOptimismMock is Receiver, CrossChainEnabledOptimism {
+contract CrossChainEnabledOptimismMock is Receiver, Sender, CrossChainEnabledOptimism {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(address bridge) CrossChainEnabledOptimism(bridge) {}
 }
@@ -48,7 +58,7 @@ contract CrossChainEnabledOptimismMock is Receiver, CrossChainEnabledOptimism {
 /**
  * Polygon
  */
-contract CrossChainEnabledPolygonChildMock is Receiver, CrossChainEnabledPolygonChild {
+contract CrossChainEnabledPolygonChildMock is Receiver, Sender, CrossChainEnabledPolygonChild {
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(address bridge) CrossChainEnabledPolygonChild(bridge) {}
 }
