@@ -56,7 +56,7 @@ abstract contract CrossChainEnabled {
      * @dev Sends a generic cross-chain message through a bridge.
      *
      * IMPORTANT: The structure of the bridgeConfig is defined in the implementations
-     * and can be built using the SDKs of the corresponding bridge.
+     * and can be built using the SDKs of the corresponding bridge most of the times.
      */
     function _sendCrossChainMessage(
         address destination,

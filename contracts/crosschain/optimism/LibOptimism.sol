@@ -35,23 +35,6 @@ library LibOptimism {
     }
 
     /**
-     * @dev Sends a message from L2 to L1 via `messenger`.
-     *
-     * Returns zero because the protocol doesn't return the transaction unique Id.
-     */
-    function sendCrossChainMessageL2ToL1(
-        address messenger,
-        address destination,
-        bytes memory calldataForL1
-    ) internal returns (uint256) {
-        // the gasLimit parameter is irrelevant sending a message from L2 to L1
-        Optimism_Bridge(messenger).sendMessage(destination, calldataForL1, 0);
-
-        // Optimism doesn't return a unique Id for the transaction
-        return 0;
-    }
-
-    /**
      * @dev Sends a cross-chain message via `messenger`.
      *
      * NOTE: Check https://community.optimism.io/docs/developers/bridge/messaging/#[Fees for sending data between L1 and L2]
