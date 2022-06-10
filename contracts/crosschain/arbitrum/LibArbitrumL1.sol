@@ -24,6 +24,7 @@ library LibArbitrumL1 {
      * for a detailed explanation of each param.
      */
     struct BridgeConfig {
+        uint256 depositValue;
         uint256 l2CallValue;
         uint256 maxSubmissionCost;
         address excessFeeRefundAddress;
@@ -72,7 +73,7 @@ library LibArbitrumL1 {
 
         BridgeConfig memory config = abi.decode(bridgeConfig, (BridgeConfig));
 
-        ticketId = ArbitrumL1_Inbox(delayedInbox).createRetryableTicket{value: msg.value}(
+        ticketId = ArbitrumL1_Inbox(delayedInbox).createRetryableTicket{value: config.depositValue}(
             destination,
             config.l2CallValue,
             config.maxSubmissionCost,
