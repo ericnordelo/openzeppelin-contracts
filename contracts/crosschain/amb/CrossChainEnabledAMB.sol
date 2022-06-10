@@ -46,4 +46,15 @@ contract CrossChainEnabledAMB is CrossChainEnabled {
     function _crossChainSender() internal view virtual override onlyCrossChain returns (address) {
         return LibAMB.crossChainSender(_bridge);
     }
+
+    /**
+     * @dev see {CrossChainEnabled-_sendCrossChainMessage}
+     *
+     * NOTE: Non implemented yet.
+     */
+    function _sendCrossChainMessage(
+        address destination,
+        bytes memory data,
+        bytes memory
+    ) internal virtual override {}
 }

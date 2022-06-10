@@ -48,6 +48,17 @@ abstract contract CrossChainEnabledPolygonChild is IFxMessageProcessor, CrossCha
     }
 
     /**
+     * @dev see {CrossChainEnabled-_sendCrossChainMessage}
+     *
+     * NOTE: Non implemented yet.
+     */
+    function _sendCrossChainMessage(
+        address destination,
+        bytes memory data,
+        bytes memory
+    ) internal virtual override {}
+
+    /**
      * @dev External entry point to receive and relay messages originating
      * from the fxChild.
      *
