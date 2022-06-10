@@ -13,7 +13,8 @@ import "../errors.sol";
  * https://arbitrum.io/[Arbitrum].
  *
  * This version should only be used on L1 to process cross-chain messages
- * originating from L2. For the other side, use {LibArbitrumL2}.
+ * originating from L2, or to send cross-chain messages from L1 to L2. For
+ * the other side, use {LibArbitrumL2}.
  */
 library LibArbitrumL1 {
     /**
@@ -65,8 +66,8 @@ library LibArbitrumL1 {
         bytes memory data,
         bytes memory bridgeConfig
     ) internal returns (uint256 ticketId) {
-        // TODO: Confirm that the first inbox is the delayed inbox
-        // because there are two inboxes in the bridge and the second one is not the sequencer inbox
+        // TODO: Confirm that the first inbox is the delayed inbox,
+        // there are two inboxes in the bridge and the second one is not the sequencer inbox
         address delayedInbox = ArbitrumL1_Bridge(bridge).allowedInboxList(0);
 
         BridgeConfig memory config = abi.decode(bridgeConfig, (BridgeConfig));

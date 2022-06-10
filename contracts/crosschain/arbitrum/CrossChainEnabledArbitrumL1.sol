@@ -11,7 +11,8 @@ import "./LibArbitrumL1.sol";
  * {CrossChainEnabled} abstraction the L1 side (mainnet).
  *
  * This version should only be deployed on L1 to process cross-chain messages
- * originating from L2. For the other side, use {CrossChainEnabledArbitrumL2}.
+ * originating from L2, or to send cross-chain messages from L1 to L2. For
+ * the other side, use {CrossChainEnabledArbitrumL2}.
  *
  * The bridge contract is provided and maintained by the arbitrum team. You can
  * find the address of this contract on the rinkeby testnet in

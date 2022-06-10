@@ -11,7 +11,8 @@ import "../errors.sol";
  * https://arbitrum.io/[Arbitrum].
  *
  * This version should only be used on L2 to process cross-chain messages
- * originating from L1. For the other side, use {LibArbitrumL1}.
+ * originating from L1, or to send cross-chain messages from L2 to L1. For
+ * the other side, use {LibArbitrumL1}.
  */
 library LibArbitrumL2 {
     /**
