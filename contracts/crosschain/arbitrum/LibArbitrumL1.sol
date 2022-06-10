@@ -23,14 +23,12 @@ library LibArbitrumL1 {
      * for a detailed explanation of each param.
      */
     struct BridgeConfig {
-        address destAddr;
         uint256 l2CallValue;
         uint256 maxSubmissionCost;
         address excessFeeRefundAddress;
         address callValueRefundAddress;
         uint256 maxGas;
         uint256 gasPriceBid;
-        bytes data;
     }
 
     /**
@@ -56,5 +54,32 @@ library LibArbitrumL1 {
         require(sender != address(0), "LibArbitrumL1: system messages without sender");
 
         return sender;
+    }
+
+    /**
+     * @dev Sends a cross-chain message from L1 to L2 via `Inbox`.
+     */
+    function sendCrossChainMessage(
+        address bridge,
+        address destination,
+        bytes memory data,
+        bytes memory bridgeConfig
+    ) internal returns (uint256 ticketId) {
+        // TODO: Confirm that the first inbox is the delayed inbox
+        // because there are two inboxes in the bridge and the second one is not the sequencer inbox
+        address delayedInbox = ArbitrumL1_Bridge(bridge).allowedInboxList(0);
+
+        BridgeConfig memory config = abi.decode(bridgeConfig, (BridgeConfig));
+
+        ticketId = ArbitrumL1_Inbox(delayedInbox).createRetryableTicket{value: msg.value}(
+            destination,
+            config.l2CallValue,
+            config.maxSubmissionCost,
+            config.excessFeeRefundAddress,
+            config.callValueRefundAddress,
+            config.maxGas,
+            config.gasPriceBid,
+            data
+        );
     }
 }

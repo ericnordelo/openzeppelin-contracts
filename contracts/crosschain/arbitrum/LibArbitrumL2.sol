@@ -42,7 +42,7 @@ library LibArbitrumL2 {
     }
 
     /**
-     * @dev Sends a message from L2 to L1 via `arbsys`.
+     * @dev Sends a cross-chain message from L2 to L1 via `arbsys`.
      *
      * NOTE: Check https://developer.offchainlabs.com/docs/l1_l2_messages#l2-to-l1-messages-lifecycle[L2 to L1 Messages Lifecycle]
      * from Arbitrum docs to understand the full lifecycle.
@@ -50,9 +50,8 @@ library LibArbitrumL2 {
     function sendCrossChainMessage(
         address arbsys,
         address destination,
-        bytes memory data,
-        bytes memory
-    ) internal {
-        ArbitrumL2_Bridge(arbsys).sendTxToL1(destination, data);
+        bytes memory data
+    ) internal returns (uint256 crossChainTxId) {
+        crossChainTxId = ArbitrumL2_Bridge(arbsys).sendTxToL1(destination, data);
     }
 }

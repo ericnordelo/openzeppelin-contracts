@@ -23,6 +23,8 @@ abstract contract CrossChainEnabledArbitrumL1 is CrossChainEnabled {
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable
     address private immutable _bridge;
 
+    event RetryableTicketCreated(uint256 indexed ticketId);
+
     /// @custom:oz-upgrades-unsafe-allow constructor
     constructor(address bridge) {
         _bridge = bridge;
@@ -44,10 +46,16 @@ abstract contract CrossChainEnabledArbitrumL1 is CrossChainEnabled {
 
     /**
      * @dev see {CrossChainEnabled-_sendCrossChainMessage}
+     *
+     * NOTE: Emits a RetryableTicketCreated with the Id of the new L2 ticket.
      */
     function _sendCrossChainMessage(
         address destination,
         bytes memory data,
         bytes memory bridgeConfig
-    ) internal virtual override {}
+    ) internal virtual override {
+        uint256 ticketId = LibArbitrumL1.sendCrossChainMessage(_bridge, destination, data, bridgeConfig);
+
+        emit RetryableTicketCreated(ticketId);
+    }
 }

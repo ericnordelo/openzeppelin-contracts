@@ -56,6 +56,8 @@ interface IBridge {
 
     function activeOutbox() external view returns (address);
 
+    function allowedInboxList(uint256 index) external view returns (address);
+
     function allowedInboxes(address inbox) external view returns (bool);
 
     function allowedOutboxes(address outbox) external view returns (bool);

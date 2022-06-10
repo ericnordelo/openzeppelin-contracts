@@ -19,6 +19,8 @@ import "./LibArbitrumL2.sol";
  * _Available since v4.6._
  */
 abstract contract CrossChainEnabledArbitrumL2 is CrossChainEnabled {
+    event L2ToL1TxSubmitted(uint256 indexed crossChainTxId);
+
     /**
      * @dev see {CrossChainEnabled-_isCrossChain}
      */
@@ -38,12 +40,16 @@ abstract contract CrossChainEnabledArbitrumL2 is CrossChainEnabled {
      *
      * NOTE: There is not extra configuration required for this channel, so bridgeConfig
      * can be safely ignored.
+     *
+     * Emits a L2ToL1TxSubmitted with a unique Id representing the L2/L1 transaction.
      */
     function _sendCrossChainMessage(
         address destination,
         bytes memory data,
         bytes memory
     ) internal virtual override {
-        return LibArbitrumL2.sendCrossChainMessage(LibArbitrumL2.ARBSYS, destination, data, "");
+        uint256 crossChainTxId = LibArbitrumL2.sendCrossChainMessage(LibArbitrumL2.ARBSYS, destination, data);
+
+        emit L2ToL1TxSubmitted(crossChainTxId);
     }
 }
