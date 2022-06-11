@@ -51,8 +51,11 @@ library LibArbitrumL2 {
     function sendCrossChainMessage(
         address arbsys,
         address destination,
-        bytes memory data
+        bytes memory data,
+        bytes memory bridgeConfig
     ) internal returns (uint256 crossChainTxId) {
-        crossChainTxId = ArbitrumL2_Bridge(arbsys).sendTxToL1(destination, data);
+        uint256 amountToDeposit = bridgeConfig.length > 0 ? abi.decode(bridgeConfig, (uint256)) : 0;
+
+        crossChainTxId = ArbitrumL2_Bridge(arbsys).sendTxToL1{value: amountToDeposit}(destination, data);
     }
 }

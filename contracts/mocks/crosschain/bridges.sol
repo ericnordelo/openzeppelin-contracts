@@ -46,6 +46,10 @@ contract BridgeArbitrumL1Mock is BaseRelayMock {
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable state-variable-assignment
     address public immutable outbox = address(new BridgeArbitrumL1Outbox());
 
+    function allowedInboxList(uint256) public view returns (address) {
+        return inbox;
+    }
+
     function activeOutbox() public view returns (address) {
         return outbox;
     }
@@ -58,6 +62,33 @@ contract BridgeArbitrumL1Mock is BaseRelayMock {
 contract BridgeArbitrumL1Inbox {
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable state-variable-assignment
     address public immutable bridge = msg.sender;
+
+    function createRetryableTicket(
+        address destAddr,
+        uint256 arbTxCallValue,
+        uint256 maxSubmissionCost,
+        address submissionRefundAddress,
+        address valueRefundAddress,
+        uint256 maxGas,
+        uint256 gasPriceBid,
+        bytes calldata data
+    ) external payable returns (uint256) {
+        return
+            uint256(
+                keccak256(
+                    abi.encode(
+                        destAddr,
+                        arbTxCallValue,
+                        maxSubmissionCost,
+                        submissionRefundAddress,
+                        valueRefundAddress,
+                        maxGas,
+                        gasPriceBid,
+                        data
+                    )
+                )
+            );
+    }
 }
 
 contract BridgeArbitrumL1Outbox {
@@ -80,6 +111,10 @@ contract BridgeArbitrumL2Mock is BaseRelayMock {
 
     function myCallersAddressWithoutAliasing() public view returns (address) {
         return _currentSender;
+    }
+
+    function sendTxToL1(address destination, bytes calldata calldataForL1) external payable returns (uint256) {
+        return uint256(keccak256(abi.encode(destination, calldataForL1)));
     }
 }
 
