@@ -125,6 +125,12 @@ contract BridgeOptimismMock is BaseRelayMock {
     function xDomainMessageSender() public view returns (address) {
         return _currentSender;
     }
+
+    function sendMessage(
+        address target,
+        bytes calldata message,
+        uint32 gasLimit
+    ) external {}
 }
 
 /**

@@ -26,13 +26,13 @@ interface ICrossDomainMessenger {
 
     /**
      * Sends a cross domain message to the target messenger.
-     * @param _target Target contract address.
-     * @param _message Message to send to the target.
-     * @param _gasLimit Gas limit for the provided message.
+     * @param target Target contract address.
+     * @param message Message to send to the target.
+     * @param gasLimit Gas limit for the provided message.
      */
     function sendMessage(
-        address _target,
-        bytes calldata _message,
-        uint32 _gasLimit
+        address target,
+        bytes calldata message,
+        uint32 gasLimit
     ) external;
 }
