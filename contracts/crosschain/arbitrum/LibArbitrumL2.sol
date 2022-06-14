@@ -47,6 +47,12 @@ library LibArbitrumL2 {
      *
      * NOTE: Check https://developer.offchainlabs.com/docs/l1_l2_messages#l2-to-l1-messages-lifecycle[L2 to L1 Messages Lifecycle]
      * from Arbitrum docs to understand the full lifecycle.
+     *
+     * @param arbsys The ArbSys precompiled contract in the L2.
+     * @param destination The address of the cross-chain target contract.
+     * @param data The calldata of the cross-chain call.
+     * @param bridgeConfig The amountToDeposit from L2 to L1 encoded as bytes.
+     * @return crossChainTxId A unique identifier for the cross-chain transaction.
      */
     function sendCrossChainMessage(
         address arbsys,

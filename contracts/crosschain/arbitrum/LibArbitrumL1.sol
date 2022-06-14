@@ -60,6 +60,12 @@ library LibArbitrumL1 {
 
     /**
      * @dev Sends a cross-chain message from L1 to L2 via `Inbox`.
+     * @param bridge The Bridge contract in the L1.
+     * @param destination The address of the cross-chain target contract.
+     * @param data The calldata of the cross-chain call.
+     * @param bridgeConfig An ABI encoded {BridgeConfig} representing the configuration required
+     * for the message to be sent through the bridge.
+     * @return ticketId A unique identifier for the Retryable Ticket created.
      */
     function sendCrossChainMessage(
         address bridge,

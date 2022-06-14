@@ -39,6 +39,11 @@ library LibOptimism {
      *
      * NOTE: Check https://community.optimism.io/docs/developers/bridge/messaging/#[Fees for sending data between L1 and L2]
      * to understand gasLimit implications.
+     *
+     * @param messenger The CrossDomainMessenger contract representing the bridge.
+     * @param destination The address of the cross-chain target contract.
+     * @param data The calldata of the cross-chain call.
+     * @param bridgeConfig The gasLimit for the cross-chain call encoded as bytes.
      */
     function sendCrossChainMessage(
         address messenger,

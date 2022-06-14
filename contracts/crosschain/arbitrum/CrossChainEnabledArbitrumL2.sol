@@ -39,7 +39,7 @@ abstract contract CrossChainEnabledArbitrumL2 is CrossChainEnabled {
     /**
      * @dev see {CrossChainEnabled-_sendCrossChainMessage}
      *
-     * Emits a L2ToL1TxSubmitted with a unique Id representing the L2/L1 transaction.
+     * NOTE: Emits a L2ToL1TxSubmitted with a unique Id representing the L2/L1 transaction.
      */
     function _sendCrossChainMessage(
         address destination,
