@@ -18,12 +18,21 @@ import "../errors.sol";
  */
 library LibArbitrumL1 {
     /**
-     * @dev This is the configuration required for creating the Retryable Ticket in L2.
+     * @dev This is the keccak256('Arbitrum-L1L2')
+     */
+    bytes32 public constant BRIDGE_ID = 0xf99ba2be00af9942e39d17830153f4e6000e00d50e0db314b50f3740e70a7015;
+
+    /**
+     * @dev These are the parameters required for creating the Retryable Ticket in L2.
      *
      * NOTE: Refer to the https://developer.offchainlabs.com/docs/l1_l2_messages#parameters[Parameters Docs] in Arbitrum
      * for a detailed explanation of each param.
+     *
+     * @param bridgeId This Id is used to ensure this bridge only send messages intended for this bridge,
+     * avoiding some unexpected scenarios if a config for a different bridge matches.
      */
-    struct BridgeConfig {
+    struct CrossChainTxParams {
+        bytes32 bridgeId;
         uint256 depositValue;
         uint256 l2CallValue;
         uint256 maxSubmissionCost;
@@ -63,7 +72,7 @@ library LibArbitrumL1 {
      * @param bridge The Bridge contract in the L1.
      * @param destination The address of the cross-chain target contract.
      * @param data The calldata of the cross-chain call.
-     * @param bridgeConfig An ABI encoded {BridgeConfig} representing the configuration required
+     * @param crossChainTxParams An ABI encoded {CrossChainTxParams} representing the parameters required
      * for the message to be sent through the bridge.
      * @return ticketId A unique identifier for the Retryable Ticket created.
      */
@@ -71,22 +80,24 @@ library LibArbitrumL1 {
         address bridge,
         address destination,
         bytes memory data,
-        bytes memory bridgeConfig
+        bytes memory crossChainTxParams
     ) internal returns (uint256 ticketId) {
         // TODO: Confirm that the first inbox is the delayed inbox,
         // there are two inboxes in the bridge and the second one is not the sequencer inbox
         address delayedInbox = ArbitrumL1_Bridge(bridge).allowedInboxList(0);
 
-        BridgeConfig memory config = abi.decode(bridgeConfig, (BridgeConfig));
+        CrossChainTxParams memory params = abi.decode(crossChainTxParams, (CrossChainTxParams));
 
-        ticketId = ArbitrumL1_Inbox(delayedInbox).createRetryableTicket{value: config.depositValue}(
+        if (BRIDGE_ID != params.bridgeId) revert InvalidTargetBridge(params.bridgeId, BRIDGE_ID);
+
+        ticketId = ArbitrumL1_Inbox(delayedInbox).createRetryableTicket{value: params.depositValue}(
             destination,
-            config.l2CallValue,
-            config.maxSubmissionCost,
-            config.excessFeeRefundAddress,
-            config.callValueRefundAddress,
-            config.maxGas,
-            config.gasPriceBid,
+            params.l2CallValue,
+            params.maxSubmissionCost,
+            params.excessFeeRefundAddress,
+            params.callValueRefundAddress,
+            params.maxGas,
+            params.gasPriceBid,
             data
         );
     }

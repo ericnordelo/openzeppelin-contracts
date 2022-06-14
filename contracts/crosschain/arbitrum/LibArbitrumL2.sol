@@ -21,6 +21,25 @@ library LibArbitrumL2 {
      */
     address public constant ARBSYS = 0x0000000000000000000000000000000000000064;
 
+    /**
+     * @dev This is the keccak256('Arbitrum-L2L1')
+     */
+    bytes32 public constant BRIDGE_ID = 0xcf0303bf7c331f43c2fd71966f5e588be6e9b5778b20d0816d972ad9d72b0550;
+
+    /**
+     * @dev These are the parameters required for configuring the cross-chain message.
+     *
+     * NOTE: Refer to the https://developer.offchainlabs.com/docs/l1_l2_messages#parameters[Parameters Docs] in Arbitrum
+     * for a detailed explanation of each param.
+     *
+     * @param bridgeId This Id is used to ensure this bridge only send messages intended for this bridge,
+     * avoiding some unexpected scenarios if a config for a different bridge matches.
+     */
+    struct CrossChainTxParams {
+        bytes32 bridgeId;
+        uint256 depositValue;
+    }
+
     function isCrossChain(address arbsys) internal view returns (bool) {
         return ArbitrumL2_Bridge(arbsys).isTopLevelCall();
     }
@@ -51,17 +70,20 @@ library LibArbitrumL2 {
      * @param arbsys The ArbSys precompiled contract in the L2.
      * @param destination The address of the cross-chain target contract.
      * @param data The calldata of the cross-chain call.
-     * @param bridgeConfig The amountToDeposit from L2 to L1 encoded as bytes.
+     * @param crossChainTxParams An ABI encoded {CrossChainTxParams} representing the parameters required
+     * for the message to be sent through the bridge.
      * @return crossChainTxId A unique identifier for the cross-chain transaction.
      */
     function sendCrossChainMessage(
         address arbsys,
         address destination,
         bytes memory data,
-        bytes memory bridgeConfig
+        bytes memory crossChainTxParams
     ) internal returns (uint256 crossChainTxId) {
-        uint256 amountToDeposit = bridgeConfig.length > 0 ? abi.decode(bridgeConfig, (uint256)) : 0;
+        CrossChainTxParams memory params = abi.decode(crossChainTxParams, (CrossChainTxParams));
 
-        crossChainTxId = ArbitrumL2_Bridge(arbsys).sendTxToL1{value: amountToDeposit}(destination, data);
+        if (BRIDGE_ID != params.bridgeId) revert InvalidTargetBridge(params.bridgeId, BRIDGE_ID);
+
+        crossChainTxId = ArbitrumL2_Bridge(arbsys).sendTxToL1{value: params.depositValue}(destination, data);
     }
 }
