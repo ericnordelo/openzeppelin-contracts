@@ -27,7 +27,7 @@ library LibArbitrumL2 {
     bytes32 public constant BRIDGE_ID = 0xcf0303bf7c331f43c2fd71966f5e588be6e9b5778b20d0816d972ad9d72b0550;
 
     /**
-     * @dev These are the parameters required for configuring the cross-chain message.
+     * @dev These are the parameters required for sending the cross-chain message.
      *
      * NOTE: Refer to the https://developer.offchainlabs.com/docs/l1_l2_messages#parameters[Parameters Docs] in Arbitrum
      * for a detailed explanation of each param.

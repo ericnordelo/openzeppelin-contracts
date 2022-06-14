@@ -4,7 +4,7 @@
 pragma solidity ^0.8.4;
 
 import "../CrossChainEnabled.sol";
-import "./LibOptimism.sol";
+import "./LibOptimismL2.sol";
 
 /**
  * @dev https://www.optimism.io/[Optimism] specialization or the
@@ -29,14 +29,14 @@ abstract contract CrossChainEnabledOptimism is CrossChainEnabled {
      * @dev see {CrossChainEnabled-_isCrossChain}
      */
     function _isCrossChain() internal view virtual override returns (bool) {
-        return LibOptimism.isCrossChain(_messenger);
+        return LibOptimismL2.isCrossChain(_messenger);
     }
 
     /**
      * @dev see {CrossChainEnabled-_crossChainSender}
      */
     function _crossChainSender() internal view virtual override onlyCrossChain returns (address) {
-        return LibOptimism.crossChainSender(_messenger);
+        return LibOptimismL2.crossChainSender(_messenger);
     }
 
     /**
@@ -47,6 +47,6 @@ abstract contract CrossChainEnabledOptimism is CrossChainEnabled {
         bytes memory data,
         bytes memory bridgeConfig
     ) internal virtual override {
-        LibOptimism.sendCrossChainMessage(_messenger, destination, data, bridgeConfig);
+        LibOptimismL2.sendCrossChainMessage(_messenger, destination, data, bridgeConfig);
     }
 }

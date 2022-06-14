@@ -3,7 +3,7 @@ const { expectRevertCustomError } = require('../helpers/customError');
 const { expectEvent } = require('@openzeppelin/test-helpers');
 const { utils } = require('ethers');
 
-function randomAddress () {
+function randomAddress() {
   return web3.utils.toChecksumAddress(web3.utils.randomHex(20));
 }
 
@@ -13,7 +13,7 @@ const CrossChainEnabledArbitrumL2Mock = artifacts.require('CrossChainEnabledArbi
 const CrossChainEnabledOptimismMock = artifacts.require('CrossChainEnabledOptimismMock');
 const CrossChainEnabledPolygonChildMock = artifacts.require('CrossChainEnabledPolygonChildMock');
 
-function shouldBehaveLikeReceiver (sender = randomAddress()) {
+function shouldBehaveLikeReceiver(sender = randomAddress()) {
   it('should reject same-chain calls', async function () {
     await expectRevertCustomError(this.contract.crossChainRestricted(), 'NotCrossChainCall()');
 
@@ -45,7 +45,7 @@ contract('CrossChainEnabled', function () {
     shouldBehaveLikeReceiver();
   });
 
-  describe('Arbitrum-L1', function () {
+  describe.only('Arbitrum-L1', function () {
     beforeEach(async function () {
       this.bridge = await BridgeHelper.deploy('Arbitrum-L1');
       this.contract = await CrossChainEnabledArbitrumL1Mock.new(this.bridge.address);
@@ -76,7 +76,7 @@ contract('CrossChainEnabled', function () {
     shouldBehaveLikeReceiver();
   });
 
-  describe('Arbitrum-L2', function () {
+  describe.only('Arbitrum-L2', function () {
     beforeEach(async function () {
       this.bridge = await BridgeHelper.deploy('Arbitrum-L2');
       this.contract = await CrossChainEnabledArbitrumL2Mock.new();
@@ -92,7 +92,7 @@ contract('CrossChainEnabled', function () {
     shouldBehaveLikeReceiver();
   });
 
-  describe('Optimism', function () {
+  describe.only('Optimism', function () {
     beforeEach(async function () {
       this.bridge = await BridgeHelper.deploy('Optimism');
       this.contract = await CrossChainEnabledOptimismMock.new(this.bridge.address);

@@ -10,8 +10,28 @@ import "../errors.sol";
  * @dev Primitives for cross-chain aware contracts for https://www.optimism.io/[Optimism].
  * See the https://community.optimism.io/docs/developers/bridge/messaging/#accessing-msg-sender[documentation]
  * for the functionality used here.
+ *
+ * This version should only be used on L1 to process cross-chain messages
+ * originating from L2, or to send cross-chain messages from L1 to L2. For
+ * the other side, use {LibOptimismL2}.
  */
-library LibOptimism {
+library LibOptimismL1 {
+    /**
+     * @dev This is the keccak256('Optimism-L1L2')
+     */
+    bytes32 public constant BRIDGE_ID = 0x8a69005a3baed81c73049b861e928740f14876213fc1cafd636c7aa14c2576b1;
+
+    /**
+     * @dev These are the parameters required for sending the cross-chain message.
+     *
+     * @param bridgeId This Id is used to ensure this bridge only send messages intended for this bridge,
+     * avoiding some unexpected scenarios if a config for a different bridge matches.
+     */
+    struct CrossChainTxParams {
+        bytes32 bridgeId;
+        uint32 gasLimit;
+    }
+
     /**
      * @dev Returns whether the current function call is the result of a
      * cross-chain message relayed by `messenger`.
@@ -43,16 +63,19 @@ library LibOptimism {
      * @param messenger The CrossDomainMessenger contract representing the bridge.
      * @param destination The address of the cross-chain target contract.
      * @param data The calldata of the cross-chain call.
-     * @param bridgeConfig The gasLimit for the cross-chain call encoded as bytes.
+     * @param crossChainTxParams An ABI encoded {CrossChainTxParams} representing the parameters required
+     * for the message to be sent through the bridge.
      */
     function sendCrossChainMessage(
         address messenger,
         address destination,
         bytes memory data,
-        bytes memory bridgeConfig
+        bytes memory crossChainTxParams
     ) internal {
-        uint32 gasLimit = bridgeConfig.length > 0 ? abi.decode(bridgeConfig, (uint32)) : 0;
+        CrossChainTxParams memory params = abi.decode(crossChainTxParams, (CrossChainTxParams));
 
-        Optimism_Bridge(messenger).sendMessage(destination, data, gasLimit);
+        if (BRIDGE_ID != params.bridgeId) revert InvalidTargetBridge(params.bridgeId, BRIDGE_ID);
+
+        Optimism_Bridge(messenger).sendMessage(destination, data, params.gasLimit);
     }
 }
