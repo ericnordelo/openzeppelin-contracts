@@ -3,7 +3,7 @@ const { expectRevertCustomError } = require('../helpers/customError');
 const { expectEvent } = require('@openzeppelin/test-helpers');
 const { utils } = require('ethers');
 
-function randomAddress() {
+function randomAddress () {
   return web3.utils.toChecksumAddress(web3.utils.randomHex(20));
 }
 
@@ -14,7 +14,7 @@ const CrossChainEnabledOptimismL1Mock = artifacts.require('CrossChainEnabledOpti
 const CrossChainEnabledOptimismL2Mock = artifacts.require('CrossChainEnabledOptimismL2Mock');
 const CrossChainEnabledPolygonChildMock = artifacts.require('CrossChainEnabledPolygonChildMock');
 
-function shouldBehaveLikeReceiver(sender = randomAddress()) {
+function shouldBehaveLikeReceiver (sender = randomAddress()) {
   it('should reject same-chain calls', async function () {
     await expectRevertCustomError(this.contract.crossChainRestricted(), 'NotCrossChainCall()');
 
