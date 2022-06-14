@@ -16,7 +16,7 @@ import "./LibOptimismL2.sol";
  *
  * _Available since v4.6._
  */
-abstract contract CrossChainEnabledOptimism is CrossChainEnabled {
+abstract contract CrossChainEnabledOptimismL2 is CrossChainEnabled {
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable
     address private immutable _messenger;
 

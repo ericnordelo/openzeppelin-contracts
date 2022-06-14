@@ -6,7 +6,8 @@ import "../../access/Ownable.sol";
 import "../../crosschain/amb/CrossChainEnabledAMB.sol";
 import "../../crosschain/arbitrum/CrossChainEnabledArbitrumL1.sol";
 import "../../crosschain/arbitrum/CrossChainEnabledArbitrumL2.sol";
-import "../../crosschain/optimism/CrossChainEnabledOptimism.sol";
+import "../../crosschain/optimism/CrossChainEnabledOptimismL1.sol";
+import "../../crosschain/optimism/CrossChainEnabledOptimismL2.sol";
 import "../../crosschain/polygon/CrossChainEnabledPolygonChild.sol";
 
 abstract contract Receiver is CrossChainEnabled {
@@ -50,9 +51,14 @@ contract CrossChainEnabledArbitrumL2Mock is Receiver, Sender, CrossChainEnabledA
 /**
  * Optimism
  */
-contract CrossChainEnabledOptimismMock is Receiver, Sender, CrossChainEnabledOptimism {
+contract CrossChainEnabledOptimismL1Mock is Receiver, Sender, CrossChainEnabledOptimismL1 {
     /// @custom:oz-upgrades-unsafe-allow constructor
-    constructor(address bridge) CrossChainEnabledOptimism(bridge) {}
+    constructor(address bridge) CrossChainEnabledOptimismL1(bridge) {}
+}
+
+contract CrossChainEnabledOptimismL2Mock is Receiver, Sender, CrossChainEnabledOptimismL2 {
+    /// @custom:oz-upgrades-unsafe-allow constructor
+    constructor(address bridge) CrossChainEnabledOptimismL2(bridge) {}
 }
 
 /**
