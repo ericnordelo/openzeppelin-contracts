@@ -55,17 +55,17 @@ abstract contract CrossChainEnabled {
     /**
      * @dev Sends a generic cross-chain message through a bridge.
      *
-     * IMPORTANT: The structure of the bridgeConfig is defined in the implementations
+     * IMPORTANT: The structure of the crossChainTxParams is defined in the implementations
      * and can be built using the SDKs of the corresponding bridge most of the times.
      *
      * @param destination The address of the cross-chain target contract.
      * @param data The calldata of the cross-chain call.
-     * @param bridgeConfig An ABI encoded struct representing the configuration required
+     * @param crossChainTxParams An ABI encoded struct representing the configuration required
      * for the message to be sent through the bridge.
      */
     function _sendCrossChainMessage(
         address destination,
         bytes memory data,
-        bytes memory bridgeConfig
+        bytes memory crossChainTxParams
     ) internal virtual;
 }
