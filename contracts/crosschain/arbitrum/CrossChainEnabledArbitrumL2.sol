@@ -44,13 +44,13 @@ abstract contract CrossChainEnabledArbitrumL2 is CrossChainEnabled {
     function _sendCrossChainMessage(
         address destination,
         bytes memory data,
-        bytes memory bridgeConfig
+        bytes memory crossChainTxParams
     ) internal virtual override {
         uint256 crossChainTxId = LibArbitrumL2.sendCrossChainMessage(
             LibArbitrumL2.ARBSYS,
             destination,
             data,
-            bridgeConfig
+            crossChainTxParams
         );
 
         emit L2ToL1TxSubmitted(crossChainTxId);

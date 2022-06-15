@@ -45,8 +45,8 @@ abstract contract CrossChainEnabledOptimismL1 is CrossChainEnabled {
     function _sendCrossChainMessage(
         address destination,
         bytes memory data,
-        bytes memory bridgeConfig
+        bytes memory crossChainTxParams
     ) internal virtual override {
-        LibOptimismL1.sendCrossChainMessage(_messenger, destination, data, bridgeConfig);
+        LibOptimismL1.sendCrossChainMessage(_messenger, destination, data, crossChainTxParams);
     }
 }
