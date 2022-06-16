@@ -17,9 +17,9 @@ import "../errors.sol";
  */
 library LibOptimismL2 {
     /**
-     * @dev This is the keccak256('Optimism-L2L1')
+     * @dev This is the first 4 bytes of the keccak256('Optimism-L2L1')
      */
-    bytes32 public constant BRIDGE_ID = 0xa2b60698a3b22f7842b51a9f95163b4bfa9eb52f824e76e57efb81994621fb9b;
+    bytes4 public constant BRIDGE_ID = 0xa2b60698;
 
     /**
      * @dev These are the parameters required for sending the cross-chain message.
@@ -28,7 +28,7 @@ library LibOptimismL2 {
      * avoiding some unexpected scenarios if a config for a different bridge matches.
      */
     struct CrossChainTxParams {
-        bytes32 bridgeId;
+        bytes4 bridgeId;
         uint32 gasLimit;
     }
 

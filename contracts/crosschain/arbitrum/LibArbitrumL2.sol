@@ -22,9 +22,9 @@ library LibArbitrumL2 {
     address public constant ARBSYS = 0x0000000000000000000000000000000000000064;
 
     /**
-     * @dev This is the keccak256('Arbitrum-L2L1')
+     * @dev This is the first 4 bytes of the keccak256('Arbitrum-L2L1')
      */
-    bytes32 public constant BRIDGE_ID = 0xcf0303bf7c331f43c2fd71966f5e588be6e9b5778b20d0816d972ad9d72b0550;
+    bytes4 public constant BRIDGE_ID = 0xcf0303bf;
 
     /**
      * @dev These are the parameters required for sending the cross-chain message.
@@ -36,7 +36,7 @@ library LibArbitrumL2 {
      * avoiding some unexpected scenarios if a config for a different bridge matches.
      */
     struct CrossChainTxParams {
-        bytes32 bridgeId;
+        bytes4 bridgeId;
         uint256 depositValue;
     }
 

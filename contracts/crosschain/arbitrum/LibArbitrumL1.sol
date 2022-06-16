@@ -18,9 +18,9 @@ import "../errors.sol";
  */
 library LibArbitrumL1 {
     /**
-     * @dev This is the keccak256('Arbitrum-L1L2')
+     * @dev This is the first 4 bytes of the keccak256('Arbitrum-L1L2')
      */
-    bytes32 public constant BRIDGE_ID = 0xf99ba2be00af9942e39d17830153f4e6000e00d50e0db314b50f3740e70a7015;
+    bytes4 public constant BRIDGE_ID = 0xf99ba2be;
 
     /**
      * @dev These are the parameters required for creating the Retryable Ticket in L2.
@@ -32,7 +32,7 @@ library LibArbitrumL1 {
      * avoiding some unexpected scenarios if a config for a different bridge matches.
      */
     struct CrossChainTxParams {
-        bytes32 bridgeId;
+        bytes4 bridgeId;
         uint256 depositValue;
         uint256 l2CallValue;
         uint256 maxSubmissionCost;
@@ -82,8 +82,7 @@ library LibArbitrumL1 {
         bytes memory data,
         bytes memory crossChainTxParams
     ) internal returns (uint256 ticketId) {
-        // TODO: Confirm that the first inbox is the delayed inbox,
-        // there are two inboxes in the bridge and the second one is not the sequencer inbox
+        // there delayed inbox is the first of the allowedInboxList
         address delayedInbox = ArbitrumL1_Bridge(bridge).allowedInboxList(0);
 
         CrossChainTxParams memory params = abi.decode(crossChainTxParams, (CrossChainTxParams));

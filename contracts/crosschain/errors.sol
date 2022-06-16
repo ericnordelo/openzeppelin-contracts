@@ -5,4 +5,4 @@ pragma solidity ^0.8.4;
 
 error NotCrossChainCall();
 error InvalidCrossChainSender(address actual, address expected);
-error InvalidTargetBridge(bytes32 actual, bytes32 expected);
+error InvalidTargetBridge(bytes4 actual, bytes4 expected);
