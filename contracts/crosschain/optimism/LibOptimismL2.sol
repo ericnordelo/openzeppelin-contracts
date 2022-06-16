@@ -3,7 +3,8 @@
 
 pragma solidity ^0.8.4;
 
-import {ICrossDomainMessenger as Optimism_Bridge} from "../../vendor/optimism/ICrossDomainMessenger.sol";
+import {ICrossDomainMessenger} from "../../vendor/optimism/ICrossDomainMessenger.sol";
+import {IL2StandardBridge} from "../../vendor/optimism/IL2StandardBridge.sol";
 import "../errors.sol";
 
 /**
@@ -17,7 +18,7 @@ import "../errors.sol";
  */
 library LibOptimismL2 {
     /**
-     * @dev This is the first 4 bytes of the keccak256('Optimism-L2L1')
+     * @dev This is the keccak256('Optimism-L2L1')
      */
     bytes4 public constant BRIDGE_ID = 0xa2b60698;
 
@@ -30,13 +31,16 @@ library LibOptimismL2 {
     struct CrossChainTxParams {
         bytes4 bridgeId;
         uint32 gasLimit;
+        uint256 depositValue;
     }
 
     /**
      * @dev Returns whether the current function call is the result of a
      * cross-chain message relayed by `messenger`.
      */
-    function isCrossChain(address messenger) internal view returns (bool) {
+    function isCrossChain(address bridge) internal view returns (bool) {
+        address messenger = IL2StandardBridge(bridge).messenger();
+
         return msg.sender == messenger;
     }
 
@@ -48,10 +52,12 @@ library LibOptimismL2 {
      * sender, as it will revert with `NotCrossChainCall` if the current
      * function call is not the result of a cross-chain message.
      */
-    function crossChainSender(address messenger) internal view returns (address) {
+    function crossChainSender(address bridge) internal view returns (address) {
+        address messenger = IL2StandardBridge(bridge).messenger();
+
         if (!isCrossChain(messenger)) revert NotCrossChainCall();
 
-        return Optimism_Bridge(messenger).xDomainMessageSender();
+        return ICrossDomainMessenger(messenger).xDomainMessageSender();
     }
 
     /**
@@ -60,14 +66,14 @@ library LibOptimismL2 {
      * NOTE: Check https://community.optimism.io/docs/developers/bridge/messaging/#[Fees for sending data between L1 and L2]
      * to understand gasLimit implications.
      *
-     * @param messenger The CrossDomainMessenger contract representing the bridge.
+     * @param bridge The L1StandardBridge contract representing the bridge.
      * @param destination The address of the cross-chain target contract.
      * @param data The calldata of the cross-chain call.
      * @param crossChainTxParams An ABI encoded {CrossChainTxParams} representing the parameters required
      * for the message to be sent through the bridge.
      */
     function sendCrossChainMessage(
-        address messenger,
+        address bridge,
         address destination,
         bytes memory data,
         bytes memory crossChainTxParams
@@ -76,6 +82,19 @@ library LibOptimismL2 {
 
         if (BRIDGE_ID != params.bridgeId) revert InvalidTargetBridge(params.bridgeId, BRIDGE_ID);
 
-        Optimism_Bridge(messenger).sendMessage(destination, data, params.gasLimit);
+        if (params.depositValue > 0) {
+            // deposit ETH through standard bridge
+            IL2StandardBridge(bridge).withdrawTo(
+                0x4200000000000000000000000000000000000006, // Wrapped Ether in L2
+                destination,
+                params.depositValue,
+                params.gasLimit,
+                data
+            );
+        } else {
+            // send the message directly through the messenger
+            address messenger = IL2StandardBridge(bridge).messenger();
+            ICrossDomainMessenger(messenger).sendMessage(destination, data, params.gasLimit);
+        }
     }
 }
