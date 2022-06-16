@@ -48,7 +48,7 @@ contract('CrossChainEnabled', function () {
   });
 
   describe('Arbitrum-L1', function () {
-    const bridgeId = '0xf99ba2be00af9942e39d17830153f4e6000e00d50e0db314b50f3740e70a7015';
+    const bridgeId = '0xf99ba2be';
     const bridgeParameters = {
       bridgeId,
       totalL2GasCosts: 0,
@@ -62,7 +62,7 @@ contract('CrossChainEnabled', function () {
 
     function encodeArbitrumL1Params (params) {
       return utils.defaultAbiCoder.encode(
-        ['bytes32', 'uint256', 'uint256', 'uint256', 'address', 'address', 'uint256', 'uint256'],
+        ['bytes4', 'uint256', 'uint256', 'uint256', 'address', 'address', 'uint256', 'uint256'],
         [...Object.values(params)],
       );
     }
@@ -82,7 +82,7 @@ contract('CrossChainEnabled', function () {
     });
 
     it('should restrict cross-chain calls with wrong bridge Id', async function () {
-      const wrongBridgeId = web3.utils.keccak256('wrong bridge id');
+      const wrongBridgeId = web3.utils.keccak256('wrong bridge id').slice(0, 10);
 
       bridgeParameters.bridgeId = wrongBridgeId;
 
@@ -98,14 +98,14 @@ contract('CrossChainEnabled', function () {
   });
 
   describe('Arbitrum-L2', function () {
-    const bridgeId = '0xcf0303bf7c331f43c2fd71966f5e588be6e9b5778b20d0816d972ad9d72b0550';
+    const bridgeId = '0xcf0303bf';
     const bridgeParameters = {
       bridgeId,
       depositValue: 0,
     };
 
     function encodeArbitrumL2Params (params) {
-      return utils.defaultAbiCoder.encode(['bytes32', 'uint256'], [...Object.values(params)]);
+      return utils.defaultAbiCoder.encode(['bytes4', 'uint256'], [...Object.values(params)]);
     }
 
     beforeEach(async function () {
@@ -123,7 +123,7 @@ contract('CrossChainEnabled', function () {
     });
 
     it('should restrict cross-chain calls with wrong bridge Id', async function () {
-      const wrongBridgeId = web3.utils.keccak256('wrong bridge id');
+      const wrongBridgeId = web3.utils.keccak256('wrong bridge id').slice(0, 10);
 
       bridgeParameters.bridgeId = wrongBridgeId;
 
@@ -140,11 +140,11 @@ contract('CrossChainEnabled', function () {
 
   describe('Optimism', function () {
     function encodeOptimismParams (params) {
-      return utils.defaultAbiCoder.encode(['bytes32', 'uint32'], [...Object.values(params)]);
+      return utils.defaultAbiCoder.encode(['bytes4', 'uint32'], [...Object.values(params)]);
     }
 
     describe('Optimism-L1', function () {
-      const bridgeId = '0x8a69005a3baed81c73049b861e928740f14876213fc1cafd636c7aa14c2576b1';
+      const bridgeId = '0x8a69005a';
       const bridgeParameters = {
         bridgeId,
         gasLimit: utils.parseEther('0.000000000001'),
@@ -162,7 +162,7 @@ contract('CrossChainEnabled', function () {
       });
 
       it('should restrict cross-chain calls with wrong bridge Id', async function () {
-        const wrongBridgeId = web3.utils.keccak256('wrong bridge id');
+        const wrongBridgeId = web3.utils.keccak256('wrong bridge id').slice(0, 10);
 
         bridgeParameters.bridgeId = wrongBridgeId;
 
@@ -178,7 +178,7 @@ contract('CrossChainEnabled', function () {
     });
 
     describe('Optimism-L2', function () {
-      const bridgeId = '0xa2b60698a3b22f7842b51a9f95163b4bfa9eb52f824e76e57efb81994621fb9b';
+      const bridgeId = '0xa2b60698';
       const bridgeParameters = {
         bridgeId,
         gasLimit: utils.parseEther('0.000000000001'),
@@ -196,7 +196,7 @@ contract('CrossChainEnabled', function () {
       });
 
       it('should restrict cross-chain calls with wrong bridge Id', async function () {
-        const wrongBridgeId = web3.utils.keccak256('wrong bridge id');
+        const wrongBridgeId = web3.utils.keccak256('wrong bridge id').slice(0, 10);
 
         bridgeParameters.bridgeId = wrongBridgeId;
 
