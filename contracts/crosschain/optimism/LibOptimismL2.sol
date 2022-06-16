@@ -38,9 +38,7 @@ library LibOptimismL2 {
      * @dev Returns whether the current function call is the result of a
      * cross-chain message relayed by `messenger`.
      */
-    function isCrossChain(address bridge) internal view returns (bool) {
-        address messenger = IL2StandardBridge(bridge).messenger();
-
+    function isCrossChain(address messenger) internal view returns (bool) {
         return msg.sender == messenger;
     }
 
@@ -52,9 +50,7 @@ library LibOptimismL2 {
      * sender, as it will revert with `NotCrossChainCall` if the current
      * function call is not the result of a cross-chain message.
      */
-    function crossChainSender(address bridge) internal view returns (address) {
-        address messenger = IL2StandardBridge(bridge).messenger();
-
+    function crossChainSender(address messenger) internal view returns (address) {
         if (!isCrossChain(messenger)) revert NotCrossChainCall();
 
         return ICrossDomainMessenger(messenger).xDomainMessageSender();

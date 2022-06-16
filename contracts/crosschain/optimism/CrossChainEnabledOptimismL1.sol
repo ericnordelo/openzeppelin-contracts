@@ -29,14 +29,18 @@ abstract contract CrossChainEnabledOptimismL1 is CrossChainEnabled {
      * @dev see {CrossChainEnabled-_isCrossChain}
      */
     function _isCrossChain() internal view virtual override returns (bool) {
-        return LibOptimismL1.isCrossChain(_l1StandardBridge);
+        address messenger = IL1StandardBridge(_l1StandardBridge).messenger();
+
+        return LibOptimismL1.isCrossChain(messenger);
     }
 
     /**
      * @dev see {CrossChainEnabled-_crossChainSender}
      */
     function _crossChainSender() internal view virtual override onlyCrossChain returns (address) {
-        return LibOptimismL1.crossChainSender(_l1StandardBridge);
+        address messenger = IL1StandardBridge(_l1StandardBridge).messenger();
+
+        return LibOptimismL1.crossChainSender(messenger);
     }
 
     /**

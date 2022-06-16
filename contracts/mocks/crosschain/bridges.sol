@@ -121,7 +121,45 @@ contract BridgeArbitrumL2Mock is BaseRelayMock {
 /**
  * Optimism
  */
-contract BridgeOptimismMock is BaseRelayMock {
+contract L1StandardBridgeOptimismMock {
+    address public messenger = address(new MessengerOptimismMock());
+
+    function depositETHTo(
+        address _to,
+        uint32 _l2Gas,
+        bytes calldata _data
+    ) external payable {}
+
+    function relayAs(
+        address target,
+        bytes calldata data,
+        address sender
+    ) external virtual {
+        MessengerOptimismMock(messenger).relayAs(target, data, sender);
+    }
+}
+
+contract L2StandardBridgeOptimismMock {
+    address public messenger = address(new MessengerOptimismMock());
+
+    function withdrawTo(
+        address _l2Token,
+        address _to,
+        uint256 _amount,
+        uint32 _l1Gas,
+        bytes calldata _data
+    ) external {}
+
+    function relayAs(
+        address target,
+        bytes calldata data,
+        address sender
+    ) external virtual {
+        MessengerOptimismMock(messenger).relayAs(target, data, sender);
+    }
+}
+
+contract MessengerOptimismMock is BaseRelayMock {
     function xDomainMessageSender() public view returns (address) {
         return _currentSender;
     }

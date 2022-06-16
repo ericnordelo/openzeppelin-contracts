@@ -4,7 +4,7 @@ const { expectEvent } = require('@openzeppelin/test-helpers');
 const { utils } = require('ethers');
 const { web3 } = require('hardhat');
 
-function randomAddress () {
+function randomAddress() {
   return web3.utils.toChecksumAddress(web3.utils.randomHex(20));
 }
 
@@ -15,7 +15,7 @@ const CrossChainEnabledOptimismL1Mock = artifacts.require('CrossChainEnabledOpti
 const CrossChainEnabledOptimismL2Mock = artifacts.require('CrossChainEnabledOptimismL2Mock');
 const CrossChainEnabledPolygonChildMock = artifacts.require('CrossChainEnabledPolygonChildMock');
 
-function shouldBehaveLikeReceiver (sender = randomAddress()) {
+function shouldBehaveLikeReceiver(sender = randomAddress()) {
   it('should reject same-chain calls', async function () {
     await expectRevertCustomError(this.contract.crossChainRestricted(), 'NotCrossChainCall()');
 
@@ -60,7 +60,7 @@ contract('CrossChainEnabled', function () {
       gasPriceBid: 5,
     };
 
-    function encodeArbitrumL1Params (params) {
+    function encodeArbitrumL1Params(params) {
       return utils.defaultAbiCoder.encode(
         ['bytes4', 'uint256', 'uint256', 'uint256', 'address', 'address', 'uint256', 'uint256'],
         [...Object.values(params)],
@@ -104,7 +104,7 @@ contract('CrossChainEnabled', function () {
       depositValue: 0,
     };
 
-    function encodeArbitrumL2Params (params) {
+    function encodeArbitrumL2Params(params) {
       return utils.defaultAbiCoder.encode(['bytes4', 'uint256'], [...Object.values(params)]);
     }
 
@@ -139,8 +139,8 @@ contract('CrossChainEnabled', function () {
   });
 
   describe('Optimism', function () {
-    function encodeOptimismParams (params) {
-      return utils.defaultAbiCoder.encode(['bytes4', 'uint32'], [...Object.values(params)]);
+    function encodeOptimismParams(params) {
+      return utils.defaultAbiCoder.encode(['bytes4', 'uint32', 'uint256'], [...Object.values(params)]);
     }
 
     describe('Optimism-L1', function () {
@@ -148,11 +148,14 @@ contract('CrossChainEnabled', function () {
       const bridgeParameters = {
         bridgeId,
         gasLimit: utils.parseEther('0.000000000001'),
+        depositValue: 0,
       };
 
       beforeEach(async function () {
-        this.bridge = await BridgeHelper.deploy('Optimism');
+        this.bridge = await BridgeHelper.deploy('Optimism-L1');
         this.contract = await CrossChainEnabledOptimismL1Mock.new(this.bridge.address);
+
+        console.log(await this.bridge.bridge.messenger());
       });
 
       it('should send cross-chain message successfuly', async function () {
@@ -182,10 +185,11 @@ contract('CrossChainEnabled', function () {
       const bridgeParameters = {
         bridgeId,
         gasLimit: utils.parseEther('0.000000000001'),
+        depositValue: 0,
       };
 
       beforeEach(async function () {
-        this.bridge = await BridgeHelper.deploy('Optimism');
+        this.bridge = await BridgeHelper.deploy('Optimism-L2');
         this.contract = await CrossChainEnabledOptimismL2Mock.new(this.bridge.address);
       });
 
